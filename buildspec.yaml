@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 767398118103.dkr.ecr.ca-central-1.amazonaws.com
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building Docker image...
+      - docker build -t assignment4 .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Tagging Docker image...
+      - docker tag assignment4:latest 767398118103.dkr.ecr.ca-central-1.amazonaws.com/assignment4:latest
+      - echo Pushing Docker image to ECR...
+      - docker push 767398118103.dkr.ecr.ca-central-1.amazonaws.com/assignment4:latest
